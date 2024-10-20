@@ -1,4 +1,4 @@
-# Syntaxer
+# Syntaxer
 
 Generic parsing library. Syntaxer gives an easy to write, programatical, pseudo-imperative way to build your own parsers.
 

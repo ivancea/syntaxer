@@ -1,0 +1,51 @@
+// @ts-check
+
+import { includeIgnoreFile } from "@eslint/compat";
+import eslint from "@eslint/js";
+import eslintPluginJest from "eslint-plugin-jest";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import path from "path";
+import tseslint from "typescript-eslint";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const gitignorePath = path.resolve(__dirname, ".gitignore");
+
+export default tseslint.config(
+  includeIgnoreFile(gitignorePath),
+  eslint.configs.recommended,
+  ...tseslint.configs.strictTypeChecked.map((config) => ({
+    ...config,
+    files: ["**/*.ts"],
+  })),
+  eslintPluginPrettierRecommended,
+  {
+    files: ["**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-dynamic-delete": "off",
+      "@typescript-eslint/restrict-template-expressions": [
+        "error",
+        { allowNumber: true },
+      ],
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-unsafe-call": "warn",
+      "@typescript-eslint/no-unsafe-member-access": "warn",
+    },
+    languageOptions: {
+      parserOptions: {
+        project: true,
+        tsconfigRootDir: __dirname,
+      },
+    },
+  },
+  {
+    files: ["**/*.test.ts"],
+    languageOptions: {
+      globals: {
+        jest: true,
+      },
+    },
+    ...eslintPluginJest.configs["flat/recommended"],
+  },
+);

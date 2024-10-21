@@ -1,27 +1,67 @@
-import { Parser } from "./parser.types";
+import { Parser } from "../lib/parser.types";
+import { Example } from "./examples.types";
 
-/*
-Example language to test the parser
-*/
-
-export const EXAMPLE_UNIT_INPUT = `
+export const examples: Example[] = [
+  {
+    name: "unit",
+    input: `
 class A {
   prop x: number;
   prop y: string;
 }
 class B {}
-`;
+`,
+    rule: unitRule,
+    expected: {
+      astType: "unit",
+      classes: [
+        {
+          astType: "class",
+          name: "A",
+          properties: [
+            { astType: "property", name: "x", type: "number" },
+            { astType: "property", name: "y", type: "string" },
+          ],
+        },
+        {
+          astType: "class",
+          name: "B",
+          properties: [],
+        },
+      ],
+    },
+  },
 
-export const EXAMPLE_CLASS_INPUT = `
+  {
+    name: "class",
+    input: `
 class A {
   prop x: number;
   prop y: string;
 }
-`.trim();
+`.trim(),
+    rule: classRule,
+    expected: {
+      astType: "class",
+      name: "A",
+      properties: [
+        { astType: "property", name: "x", type: "number" },
+        { astType: "property", name: "y", type: "string" },
+      ],
+    },
+  },
 
-export const EXAMPLE_PROPERTY_INPUT = `
-prop x: number;
-`.trim();
+  {
+    name: "property",
+    input: `prop x: number;`,
+    rule: propertyRule,
+    expected: {
+      astType: "property",
+      name: "x",
+      type: "number",
+    },
+  },
+];
 
 // AST
 
@@ -41,6 +81,8 @@ type PropertyAST = {
   name: string;
   type: string;
 };
+
+// Rules
 
 export function unitRule(parser: Parser): UnitAST {
   const classes = parser.many((p) => {

@@ -53,6 +53,10 @@ To avoid executing everything from scratch within a rule, values are memoized. T
 
 ## Roadmap
 
+- Matchers:
+  - .any(): Different rule return types causing type error on generic
+  - .optional(), with default, with custom return
+  - .regex(): Parameter to return the matched groups
 - Better errors
 - Verify that the correct Parser is called within each parse() function.
   For example, `parser.use(() => parser.string("A"))` is an error.

@@ -10,7 +10,7 @@ Rules are functions receiving the parser helper object, and an optional context 
 
 Inside of each rule, you can use the parser "hook-like" methods to build your rule expectations. Your rule will return whatever object you want to build with the parsed information.
 
-## Example
+## Example
 
 Let's build a simple parser that will automatically evaluate any mathematical expression. For this example, we'll just accept integers and "+" operations:
 

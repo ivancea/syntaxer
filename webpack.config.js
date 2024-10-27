@@ -4,8 +4,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export default {
-  entry: "./lib/parser.ts",
+const commonConfig = {
   module: {
     rules: [
       {
@@ -15,12 +14,32 @@ export default {
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
-  },
-  output: {
-    filename: "bundle.js",
-    path: path.resolve(__dirname, "build"),
-    library: "syntaxer",
-    clean: true,
+    extensions: [".ts", ".js"],
   },
 };
+
+export default [
+  {
+    ...commonConfig,
+    name: "syntaxer",
+    entry: "./lib/parser.ts",
+    output: {
+      filename: "bundle.js",
+      path: path.resolve(__dirname, "build/syntaxer"),
+      library: "syntaxer",
+      clean: true,
+    },
+  },
+  {
+    ...commonConfig,
+    name: "benchmarks",
+    entry: "./benchmarks/benchmarks.ts",
+    target: "node",
+    output: {
+      filename: "benchmarks.cjs",
+      path: path.resolve(__dirname, "build/benchmarks"),
+      libraryTarget: "commonjs",
+      clean: true,
+    },
+  },
+];
